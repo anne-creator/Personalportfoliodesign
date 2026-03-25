@@ -273,11 +273,13 @@ export function PacManGame() {
         const newDir = keyMap[e.key];
         nextDirRef.current = newDir;
         keyHeldRef.current = true;
-        const maze = mazeRef.current;
-        const np = { x: playerRef.current.x + DIRS[newDir].x, y: playerRef.current.y + DIRS[newDir].y };
-        if (canMove(maze, np.x, np.y)) {
-          playerDirRef.current = newDir;
-          lastTickRef.current = performance.now();
+        if (!e.repeat) {
+          const maze = mazeRef.current;
+          const np = { x: playerRef.current.x + DIRS[newDir].x, y: playerRef.current.y + DIRS[newDir].y };
+          if (canMove(maze, np.x, np.y)) {
+            playerDirRef.current = newDir;
+            lastTickRef.current = performance.now();
+          }
         }
       }
     }
@@ -749,7 +751,7 @@ export function PacManGame() {
               {popupBoss.type === "about" ? (
                 /* About Me popup */
                 <div
-                  className="text-center p-6 mx-4"
+                  className="relative text-center p-6 mx-4"
                   style={{
                     background: "#0a0e1a",
                     border: "2px solid #00e5ff",
@@ -758,6 +760,13 @@ export function PacManGame() {
                     boxShadow: "0 0 40px rgba(0, 229, 255, 0.15)",
                   }}
                 >
+                  <button
+                    onClick={() => { setPopupBoss(null); setPhase("playing"); }}
+                    className="absolute"
+                    style={{ top: 12, right: 14, color: "#5e5e78", fontSize: 20, background: "none", border: "none", cursor: "pointer", lineHeight: 1 }}
+                  >
+                    ✕
+                  </button>
                   {/* Photo */}
                   <div className="flex justify-center mb-4">
                     <div
